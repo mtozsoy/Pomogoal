@@ -90,8 +90,8 @@ export function AppearanceView({ settings, update }: Props) {
           {GRADIENTS.map((g) => (
             <button
               key={g.id}
-              title={g.name}
-              aria-label={g.name}
+              title={t(g.name)}
+              aria-label={t(g.name)}
               aria-pressed={bg.kind === 'gradient' && bg.id === g.id}
               className={bg.kind === 'gradient' && bg.id === g.id ? 'swatch active' : 'swatch'}
               style={{ background: g.css }}

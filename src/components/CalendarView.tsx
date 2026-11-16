@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { t } from '../lib/i18n'
+import { dateLocale, t } from '../lib/i18n'
 import {
   currentStreakDays,
   dayKey,
@@ -16,8 +16,6 @@ interface Props {
   stats: Stats
 }
 
-const LOCALE = 'tr-TR'
-
 function levelFor(minutes: number): number {
   if (minutes <= 0) return 0
   if (minutes < 25) return 1
@@ -32,7 +30,7 @@ function keyToDate(key: string): Date {
 }
 
 function capitalize(s: string): string {
-  return s.charAt(0).toLocaleUpperCase(LOCALE) + s.slice(1)
+  return s.charAt(0).toLocaleUpperCase(dateLocale()) + s.slice(1)
 }
 
 export function CalendarView({ sessions, stats }: Props) {
@@ -67,9 +65,9 @@ export function CalendarView({ sessions, stats }: Props) {
   while (cells.length % 7 !== 0) cells.push(null)
 
   const weekdays = Array.from({ length: 7 }, (_, i) =>
-    new Intl.DateTimeFormat(LOCALE, { weekday: 'short' }).format(new Date(2024, 0, 1 + i))
+    new Intl.DateTimeFormat(dateLocale(), { weekday: 'short' }).format(new Date(2024, 0, 1 + i))
   )
-  const monthLabel = capitalize(new Intl.DateTimeFormat(LOCALE, { month: 'long', year: 'numeric' }).format(month))
+  const monthLabel = capitalize(new Intl.DateTimeFormat(dateLocale(), { month: 'long', year: 'numeric' }).format(month))
 
   const now = new Date()
   const isCurrentMonth = y === now.getFullYear() && m === now.getMonth()
@@ -78,7 +76,7 @@ export function CalendarView({ sessions, stats }: Props) {
   const selTotal = totals.get(selected)
   const selSessions = sessions.filter((s) => dayKey(s.ts) === selected).sort((a, b) => a.ts - b.ts)
   const selLabel = capitalize(
-    new Intl.DateTimeFormat(LOCALE, { weekday: 'long', day: 'numeric', month: 'long' }).format(keyToDate(selected))
+    new Intl.DateTimeFormat(dateLocale(), { weekday: 'long', day: 'numeric', month: 'long' }).format(keyToDate(selected))
   )
 
   return (
@@ -185,7 +183,7 @@ export function CalendarView({ sessions, stats }: Props) {
               <ul className="cal-sessions">
                 {selSessions.map((s) => (
                   <li key={s.ts}>
-                    <span>{new Date(s.ts).toLocaleTimeString(LOCALE, { hour: '2-digit', minute: '2-digit' })}</span>
+                    <span>{new Date(s.ts).toLocaleTimeString(dateLocale(), { hour: '2-digit', minute: '2-digit' })}</span>
                     <span>
                       {s.minutes} {t('minuteUnit')}
                     </span>

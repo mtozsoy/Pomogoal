@@ -174,13 +174,32 @@ export const BADGES: Badge[] = [
   { id: 'hundred', icon: 'trophy', name: 'badgeHundred', desc: 'badgeHundredDesc', earned: (s) => s.totalPomodoros >= 100 }
 ]
 
+/**
+ * Eski sürümler varsayılan ödülleri Türkçe metin olarak kaydetti. Kullanıcı
+ * değiştirmediyse anahtar gibi davranır ki dil değişince o da çevrilsin.
+ */
+const LEGACY_REWARDS: Record<string, { text: string; key: NonNullable<Goal['rewardKey']> }> = {
+  'g-today-4': { text: 'Kendine bir kahve al', key: 'rewardCoffee' },
+  'g-streak-3': { text: 'Bir bölüm dizi izle', key: 'rewardEpisode' },
+  'g-total-25': { text: 'Küçük bir hediye al', key: 'rewardGift' }
+}
+
+export function rewardText(goal: Goal): string {
+  if (goal.reward) {
+    const legacy = LEGACY_REWARDS[goal.id]
+    return legacy && legacy.text === goal.reward ? t(legacy.key) : goal.reward
+  }
+  return goal.rewardKey ? t(goal.rewardKey) : ''
+}
+
 export const DEFAULT_GOALS: Goal[] = [
   {
     id: 'g-today-4',
     title: goalTitle('todayPomodoros', 4),
     metric: 'todayPomodoros',
     target: 4,
-    reward: 'Kendine bir kahve al',
+    reward: '',
+    rewardKey: 'rewardCoffee',
     claimedKey: ''
   },
   {
@@ -188,7 +207,8 @@ export const DEFAULT_GOALS: Goal[] = [
     title: goalTitle('streak', 3),
     metric: 'streak',
     target: 3,
-    reward: 'Bir bölüm dizi izle',
+    reward: '',
+    rewardKey: 'rewardEpisode',
     claimedKey: ''
   },
   {
@@ -196,7 +216,8 @@ export const DEFAULT_GOALS: Goal[] = [
     title: goalTitle('totalPomodoros', 25),
     metric: 'totalPomodoros',
     target: 25,
-    reward: 'Küçük bir hediye al',
+    reward: '',
+    rewardKey: 'rewardGift',
     claimedKey: ''
   }
 ]

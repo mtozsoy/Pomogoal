@@ -18,7 +18,7 @@ import { playSound, unlockAudio } from './lib/sound'
 import { ensureNotifyPermission, notify } from './lib/notify'
 import { backgroundCss, onColor } from './lib/themes'
 import { DEFAULT_GOALS, computeStats, dayKey } from './lib/stats'
-import { t, type TextKey } from './lib/i18n'
+import { resolveLang, setLocale, t, type TextKey } from './lib/i18n'
 import { DEFAULT_SETTINGS, type Goal, type Session, type Settings } from './lib/types'
 
 type Tab = 'timer' | 'calendar' | 'goals' | 'social'
@@ -43,6 +43,12 @@ export default function App() {
   const [settings, setSettings] = useLocalStorage<Settings>('settings', DEFAULT_SETTINGS)
   const [sessions, setSessions] = useLocalStorage<Session[]>('sessions', [])
   const [goals, setGoals] = useLocalStorage<Goal[]>('goals', DEFAULT_GOALS)
+  // t() modül düzeyindeki dili okur; bu çizimdeki tüm alt bileşenlerden önce ayarlanmalı
+  const lang = resolveLang(settings.language)
+  setLocale(lang)
+  useEffect(() => {
+    document.documentElement.lang = lang
+  }, [lang])
   const [player, setPlayer] = useLocalStorage<PlayerState>('player', DEFAULT_PLAYER)
   // Aynı metin art arda gelse de bildirim yeniden görünsün diye kimlik taşır
   const [toast, setToast] = useState<{ id: number; text: string } | null>(null)

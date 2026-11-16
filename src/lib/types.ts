@@ -9,6 +9,7 @@ export type BackgroundSetting =
   | { kind: 'image'; dataUrl: string }
 
 export type MotionMode = 'on' | 'auto' | 'off'
+export type LanguageSetting = 'auto' | 'tr' | 'en'
 
 export interface Settings {
   focusMin: number
@@ -28,6 +29,7 @@ export interface Settings {
   sound: SoundKind
   volume: number // 0-1
   customSoundUrl: string
+  language: LanguageSetting
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -47,7 +49,8 @@ export const DEFAULT_SETTINGS: Settings = {
   motion: 'on',
   sound: 'zil',
   volume: 0.6,
-  customSoundUrl: ''
+  customSoundUrl: '',
+  language: 'auto'
 }
 
 export interface Session {
@@ -65,5 +68,7 @@ export interface Goal {
   metric: GoalMetric
   target: number
   reward: string
+  /** Varsayılan hedeflerde ödül metni dil değişince çevrilsin diye anahtar olarak tutulur */
+  rewardKey?: 'rewardCoffee' | 'rewardEpisode' | 'rewardGift'
   claimedKey: string // günlük hedeflerde alındığı gün, diğerlerinde 'done'
 }

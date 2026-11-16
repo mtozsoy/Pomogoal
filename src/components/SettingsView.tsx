@@ -3,7 +3,7 @@ import { t, type TextKey } from '../lib/i18n'
 import { playSound } from '../lib/sound'
 import { fileToDataUrl } from '../lib/files'
 import { Range, Stepper, Switch } from './controls'
-import type { Settings, SoundKind } from '../lib/types'
+import type { LanguageSetting, Settings, SoundKind } from '../lib/types'
 
 interface Props {
   settings: Settings
@@ -18,12 +18,35 @@ const SOUNDS: { id: SoundKind; label: TextKey }[] = [
   { id: 'yok', label: 'soundNone' }
 ]
 
+const LANGUAGES: { id: LanguageSetting; label: TextKey }[] = [
+  { id: 'auto', label: 'languageAuto' },
+  { id: 'tr', label: 'langTr' },
+  { id: 'en', label: 'langEn' }
+]
+
 export function SettingsView({ settings, update }: Props) {
   const soundInput = useRef<HTMLInputElement>(null)
   const [soundError, setSoundError] = useState('')
 
   return (
     <div className="sidebar-scroll">
+      <section className="card">
+        <h2>{t('sectionLanguage')}</h2>
+        <div className="chips">
+          {LANGUAGES.map((l) => (
+            <button
+              key={l.id}
+              lang={l.id === 'tr' ? 'tr' : l.id === 'en' ? 'en' : undefined}
+              className={settings.language === l.id ? 'chip active' : 'chip'}
+              aria-pressed={settings.language === l.id}
+              onClick={() => update({ language: l.id })}
+            >
+              {t(l.label)}
+            </button>
+          ))}
+        </div>
+      </section>
+
       <section className="card">
         <h2>{t('sectionDurations')}</h2>
         <Stepper label={t('focusMin')} value={settings.focusMin} min={1} max={180} onChange={(n) => update({ focusMin: n })} />

@@ -5,7 +5,7 @@ birine (veya yeni bir Claude oturumuna) gerekli olanı anlatır.
 
 ## Proje
 
-Özelleştirilebilir pomodoro uygulaması. Arayüz tamamen Türkçe. Vite + React 19 +
+Özelleştirilebilir pomodoro uygulaması. Arayüz Türkçe ve İngilizce (Ayarlar → Dil; varsayılan tarayıcının dili). Vite + React 19 +
 TypeScript, PWA (çevrimdışı açılır, "uygulama olarak yükle" destekler).
 Hesap/arkadaşlık/sıralama kısmı Supabase ile çalışır ve **isteğe bağlıdır**:
 Supabase kurulmazsa uygulama yalnızca yerel olarak sorunsuz çalışır.
@@ -29,7 +29,7 @@ src/App.tsx              Sekmeler, yan paneller, genel durum, oturum kaydı
 src/lib/timer.ts         Sayaç mantığı (pomodoro / geri sayım / kronometre)
 src/lib/stats.ts         İstatistik, seviye, seri, rozet, hedef hesapları
 src/lib/storage.ts       localStorage ile senkron state
-src/lib/i18n.ts          TÜM metinler burada (t('key'))
+src/lib/i18n.ts          TÜM metinler burada (t('key')), `tr` ve `en` sözlükleri
 src/lib/account.tsx      Supabase oturumu, profil, şifre işlemleri
 src/lib/sync.ts          Seansların buluta eşitlenmesi
 src/lib/social.ts        Arkadaşlık ve sıralama çağrıları
@@ -43,7 +43,13 @@ supabase/migration-pomodoros.sql   Sonradan eklenen pomodoros sütunu
 ## Kurallar
 
 - **Metin yazma, anahtar ekle.** Arayüzdeki her yazı `src/lib/i18n.ts` içinde
-  tanımlanır ve `t('anahtar')` ile kullanılır. JSX içine düz Türkçe metin yazma.
+  tanımlanır ve `t('anahtar')` ile kullanılır. JSX içine düz metin yazma.
+  Yeni anahtar hem `tr` hem `en` sözlüğüne eklenir (`en` eksikse derleme hata verir).
+  İngilizcede tekil/çoğul için `{n|pomodoro|pomodoros}` biçimi kullanılır.
+- **Dile bağlı metin kaydedilmez.** Kayıtta anahtar veya kimlik tutulur, metin
+  çizimde üretilir: hedef başlığı ölçüt+hedeften, varsayılan ödül `rewardKey`
+  ile, söz sırası (`quotes.ts`) ile. Böylece dil değişince her şey çevrilir.
+  Tarih/saat biçimleri `dateLocale()` ile alınır, `'tr-TR'` sabit yazılmaz.
 - **Yorumlar Türkçe** ve "ne yaptığını" değil "neden böyle yapıldığını" anlatır.
 - Emoji kullanma (varsayılan hedef/ödül metinlerinde bilinçli olarak yok).
 - Yeni bir ayar eklerken `Settings` tipine, `DEFAULT_SETTINGS`'e ve ilgili panele

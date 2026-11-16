@@ -1,6 +1,6 @@
 import { useState, type JSX } from 'react'
 import { t } from '../lib/i18n'
-import { BADGES, METRIC_LABEL, claimKeyFor, goalTitle, metricValue, type Stats } from '../lib/stats'
+import { BADGES, METRIC_LABEL, claimKeyFor, goalTitle, metricValue, rewardText, type Stats } from '../lib/stats'
 import { BoltIcon, CalendarIcon, FlameIcon, GiftIcon, LeafIcon, TargetIcon, TrophyIcon } from './icons'
 import type { Goal, GoalMetric } from '../lib/types'
 
@@ -45,7 +45,7 @@ export function GoalsView({ stats, goals, setGoals, onClaim }: Props) {
 
   function claim(goal: Goal) {
     setGoals((prev) => prev.map((g) => (g.id === goal.id ? { ...g, claimedKey: claimKeyFor(g) } : g)))
-    onClaim(goal.reward)
+    onClaim(rewardText(goal))
   }
 
   return (
@@ -90,7 +90,7 @@ export function GoalsView({ stats, goals, setGoals, onClaim }: Props) {
               return (
                 <li key={g.id} className={done ? 'goal done' : 'goal'}>
                   <div className="goal-top">
-                    <span className="goal-title">{g.title}</span>
+                    <span className="goal-title">{goalTitle(g.metric, g.target)}</span>
                     <span className="goal-count">
                       {Math.min(value, g.target)} / {g.target}
                     </span>
@@ -99,10 +99,10 @@ export function GoalsView({ stats, goals, setGoals, onClaim }: Props) {
                     <div className="bar-value" style={{ width: `${Math.min(100, (value / g.target) * 100)}%` }} />
                   </div>
                   <div className="goal-bottom">
-                    {g.reward ? (
+                    {rewardText(g) ? (
                       <span className="goal-reward">
                         <GiftIcon size={15} />
-                        {g.reward}
+                        {rewardText(g)}
                       </span>
                     ) : (
                       <span />

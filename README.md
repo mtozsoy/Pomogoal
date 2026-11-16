@@ -34,6 +34,7 @@ yüklemen yeterli. Yayınlanan sürüm çevrimdışı da açılır ve "yükle" s
 - Sayfayı yenilesen bile sayaç kaldığı yerden devam eder; sekme kapalıyken geçen süre sayılmaz
 - Kronometre ve geri sayımda 20 dakika odak = 1 pomodoro; artan dakikalar kaybolmaz, sonraki turlarda birikir
 
+- Türkçe ve İngilizce arayüz: Ayarlar → Dil. Varsayılan olarak tarayıcının dilini izler
 - Müzik: üstteki nota simgesinden bir YouTube video veya oynatma listesi bağlantısı yapıştır; köşedeki oynatıcı paneli kapatsan da çalmaya devam eder. İstersen odak başlayınca oynatıp molada duraklatır
 - İsteğe bağlı hesap: e-posta/şifre veya Google ile giriş, kullanıcı adıyla arkadaş ekleme (istek kabul edilince arkadaşlık kurulur), haftalık/aylık sıralama (arkadaşlar arasında ve genel)
 
@@ -99,7 +100,7 @@ src/
   lib/ticker.ts            Arka planda yavaşlamayan zamanlayıcı (Web Worker)
   lib/stats.ts             İstatistik, seviye, rozet, hedef hesapları
   lib/quotes.ts            Motivasyon sözleri
-  lib/i18n.ts              Tüm Türkçe metinler
+  lib/i18n.ts              Tüm arayüz metinleri (Türkçe ve İngilizce)
   lib/sound.ts             Bitiş sesleri
   lib/youtube.ts           YouTube bağlantısını ayrıştırma ve gömme adresi
   lib/themes.ts            Hazır arka planlar

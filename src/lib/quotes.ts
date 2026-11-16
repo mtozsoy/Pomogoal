@@ -1,7 +1,9 @@
-// Kısa motivasyon sözleri. Buraya istediğin kadar yenisini ekleyebilirsin.
+// Kısa motivasyon sözleri. Her dilde aynı sayıda olmaları gerekmez.
+import { getLocale, type Lang } from './i18n'
+
 export type QuoteKind = 'focus' | 'break'
 
-const FOCUS: string[] = [
+const FOCUS_TR: string[] = [
   'Küçük adımlar, büyük yolları bitirir.',
   'Şimdi sadece bu görev var. Gerisi bekleyebilir.',
   'Mükemmel olmak zorunda değil, başlamış olmak yeter.',
@@ -20,7 +22,7 @@ const FOCUS: string[] = [
   'Sadece bir sonraki küçük adıma odaklan.'
 ]
 
-const BREAK: string[] = [
+const BREAK_TR: string[] = [
   'Gözlerini ekrandan ayır, biraz uzağa bak.',
   'Bir bardak su iç, omuzlarını gevşet.',
   'Dinlenmek de işin bir parçasıdır.',
@@ -32,8 +34,55 @@ const BREAK: string[] = [
   'Kısa bir yürüyüş, sonraki seansı kolaylaştırır.'
 ]
 
-export function pickQuote(kind: QuoteKind, exclude?: string): string {
-  const list = kind === 'break' ? BREAK : FOCUS
-  const pool = list.length > 1 ? list.filter((q) => q !== exclude) : list
-  return pool[Math.floor(Math.random() * pool.length)]
+const FOCUS_EN: string[] = [
+  'Small steps finish long roads.',
+  'Right now there is only this task. Everything else can wait.',
+  'It does not have to be perfect; starting is enough.',
+  'Every pomodoro today makes tomorrow easier.',
+  'The hard part was starting, and you already did it.',
+  'One more pomodoro: it will not take that long.',
+  'Where your attention goes, your effort follows.',
+  'Put the phone down, just for a few minutes.',
+  'Slow progress beats no progress.',
+  'You get a little better with every session.',
+  'Big work is made of small moments of focus, repeated.',
+  'If your mind wanders, do not be hard on yourself. Gently come back.',
+  'Done is better than perfect and never started.',
+  'Exams, projects, assignments: all of them get done piece by piece.',
+  'Today’s effort is tomorrow’s ease.',
+  'Focus only on the next small step.'
+]
+
+const BREAK_EN: string[] = [
+  'Look away from the screen at something far away.',
+  'Drink a glass of water and relax your shoulders.',
+  'Rest is part of the work.',
+  'Stand up and stretch a little.',
+  'Take a deep breath and let it out slowly.',
+  'You earned this break. Spend it on yourself, not your phone.',
+  'A rested mind learns better.',
+  'Look out the window and just wait for a few minutes.',
+  'A short walk makes the next session easier.'
+]
+
+const LISTS: Record<Lang, Record<QuoteKind, string[]>> = {
+  tr: { focus: FOCUS_TR, break: BREAK_TR },
+  en: { focus: FOCUS_EN, break: BREAK_EN }
+}
+
+/**
+ * Söz metni değil sırası saklanır: dil değişince ekrandaki söz de anında
+ * çevrilsin. Diller arasında liste uzunluğu farklıysa mod alınır.
+ */
+export function pickQuote(kind: QuoteKind, exclude?: number): number {
+  const len = LISTS[getLocale()][kind].length
+  if (len <= 1) return 0
+  let i = Math.floor(Math.random() * (len - 1))
+  if (exclude !== undefined && i >= exclude % len) i += 1
+  return i
+}
+
+export function quoteText(kind: QuoteKind, index: number): string {
+  const list = LISTS[getLocale()][kind]
+  return list[index % list.length]
 }

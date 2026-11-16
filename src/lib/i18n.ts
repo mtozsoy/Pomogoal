@@ -1,5 +1,5 @@
-// Tüm arayüz metinleri burada. İngilizce eklemek için `en` sözlüğünü
-// doldurup `locale` değerini ayarlardan seçilebilir hale getirmek yeterli.
+// Tüm arayüz metinleri burada. Yeni bir anahtar önce `tr` sözlüğüne eklenir;
+// `en` sözlüğü `Record<TextKey, string>` olduğu için eksik çeviri derlemede yakalanır.
 const tr = {
   appName: 'Pomodoro',
   tabTimer: 'Sayaç',
@@ -235,6 +235,23 @@ const tr = {
   playerClear: 'Videoyu kaldır',
   playerFrameTitle: 'YouTube oynatıcı',
 
+  sectionLanguage: 'Dil',
+  languageAuto: 'Sistemi izle',
+  // Dil adları her sözlükte kendi dilinde yazılır ki kullanıcı kendi dilini tanısın
+  langTr: 'Türkçe',
+  langEn: 'English',
+
+  themeGece: 'Gece Lambası',
+  themeOrman: 'Orman',
+  themeGunbatimi: 'Gün Batımı',
+  themeOkyanus: 'Okyanus',
+  themeDomates: 'Domates',
+  themeKul: 'Kül',
+
+  rewardCoffee: 'Kendine bir kahve al',
+  rewardEpisode: 'Bir bölüm dizi izle',
+  rewardGift: 'Küçük bir hediye al',
+
   errGeneric:'Bir şeyler ters gitti. Biraz sonra tekrar dene.',
   errBadLogin: 'E-posta veya şifre hatalı.',
   errNotConfirmed: 'E-postan henüz onaylanmamış. Gelen kutundaki bağlantıya tıkla.',
@@ -249,13 +266,313 @@ const tr = {
 
 export type TextKey = keyof typeof tr
 
-const locales: Record<string, Record<TextKey, string>> = { tr }
-let locale = 'tr'
+export type Lang = 'tr' | 'en'
+/** Ayarlardaki değer: 'auto' tarayıcının diline bakar */
+export type LangSetting = Lang | 'auto'
 
+const en: Record<TextKey, string> = {
+  appName: 'Pomodoro',
+  tabTimer: 'Timer',
+  tabGoals: 'Goals',
+  tabCalendar: 'Calendar',
+  tabSettings: 'Settings',
+  tabAppearance: 'Appearance',
+  close: 'Close',
+  quoteNext: 'New quote',
+
+  modePomodoro: 'Pomodoro',
+  modeCountdown: 'Countdown',
+  modeStopwatch: 'Stopwatch',
+  phaseFocus: 'Focus',
+  phaseShort: 'Short Break',
+  phaseLong: 'Long Break',
+
+  start: 'Start',
+  pause: 'Pause',
+  resume: 'Resume',
+  reset: 'Reset',
+  skip: 'Skip',
+
+  today: 'Today',
+  pomodoroUnit: 'pomodoros',
+  minuteUnit: 'min',
+  dayUnit: 'days',
+  streak: 'Streak',
+  level: 'Level',
+
+  sectionDurations: 'Durations',
+  focusMin: 'Focus length (min)',
+  shortMin: 'Short break (min)',
+  longMin: 'Long break (min)',
+  longEvery: 'Focus sessions before a long break',
+  countdownMin: 'Countdown length (min)',
+  autoStart: 'Start the next phase automatically',
+  notifyOn: 'Show a notification when the tab is in the background',
+
+  sectionClock: 'Timer',
+  sectionColors: 'Colors',
+  barColor: 'Progress bar color',
+  barColorFollow: 'Use accent color',
+  showQuotes: 'Show motivational quotes',
+  displayStyle: 'Time display',
+  displayDigital: 'Digital',
+  displayRing: 'Dial',
+  displayBar: 'Bar',
+  displayMinimal: 'Minimal',
+  background: 'Background',
+  bgColor: 'Solid color',
+  bgImage: 'Choose image…',
+  bgImageHint: 'The image is resized automatically and stored only on this device.',
+  dim: 'Background dimming',
+  accent: 'Accent color',
+
+  sectionSound: 'Sound',
+  soundKind: 'End sound',
+  soundZil: 'Bell',
+  soundCan: 'Chime',
+  soundBip: 'Beep',
+  soundNone: 'Silent',
+  soundCustom: 'My own sound',
+  soundPick: 'Choose sound file…',
+  soundTooBig: 'The sound file can be at most 1.5 MB.',
+  volume: 'Volume',
+  test: 'Test',
+
+  goalsTitle: 'Goals and Rewards',
+  goalsEmpty: 'No goals yet. Add one below.',
+  goalAdd: 'New goal',
+  goalMetric: 'What to measure?',
+  goalTarget: 'Target',
+  goalReward: 'Reward (optional)',
+  goalRewardPlaceholder: 'E.g. Grab a coffee',
+  goalCreate: 'Add',
+  goalClaim: 'Claim reward',
+  goalClaimed: 'Claimed',
+  goalDelete: 'Delete',
+  metricTodayPomodoros: 'Pomodoros completed today',
+  metricTodayMinutes: 'Minutes focused today',
+  metricTotalPomodoros: 'Total pomodoros',
+  metricStreak: 'Day streak',
+  badges: 'Badges',
+  rewardEarned: 'Reward earned:',
+  notifyFocusTitle: 'Focus complete',
+  notifyFocusBody: 'Time for a break. Get some rest.',
+  notifyBreakTitle: 'Break is over',
+  notifyBreakBody: 'You can start a new focus session.',
+  notifyCountdownTitle: "Time's up",
+  notifyCountdownBody: 'The countdown has finished.',
+  barColorSame: 'Same as accent',
+  colorCustom: 'Pick another color',
+  stepperLess: 'Decrease',
+  stepperMore: 'Increase',
+  focusRounds: 'Focus round',
+  streakUnit: 'day streak',
+  todayUnit: 'today',
+  xpUnit: 'XP',
+  hourUnit: 'h',
+  progressSaved: 'Your progress is saved and resumes when you come back',
+  sectionMotion: 'Animations',
+  motionOn: 'On',
+  motionAuto: 'Follow system',
+  motionOff: 'Off',
+  motionHint: 'If animations are turned off in your operating system, "Follow system" turns off the effects in the app too.',
+  calStreak: 'Current streak',
+  calLongest: 'Longest streak',
+  calMonthFocus: 'Focus this month',
+  calActiveDays: 'Active days',
+  calPrev: 'Previous month',
+  calNext: 'Next month',
+  calToday: 'Today',
+  calLess: 'Less',
+  calMore: 'More',
+  calLegendStreak: 'Current streak day',
+  calNoSessions: 'No pomodoros on this day.',
+  calDayTotal: '{n} {n|pomodoro|pomodoros}, {m}',
+  calCellHint: 'The number in each box is the minutes focused that day.',
+
+  titleTodayPomodoros: 'Complete {n} {n|pomodoro|pomodoros} today',
+  titleTodayMinutes: 'Focus for {n} {n|minute|minutes} today',
+  titleTotalPomodoros: 'Complete {n} {n|pomodoro|pomodoros} in total',
+  titleStreak: 'Work {n} {n|day|days} in a row',
+
+  badgeFirst: 'First Step',
+  badgeFirstDesc: 'Complete your first pomodoro',
+  badgeTen: 'Warming Up',
+  badgeTenDesc: 'Complete 10 pomodoros',
+  badgeHundred: 'Master',
+  badgeHundredDesc: 'Complete 100 pomodoros',
+  badgeFiveDay: 'Productive Day',
+  badgeFiveDayDesc: 'Complete 5 pomodoros in a single day',
+  badgeStreak3: 'Habit',
+  badgeStreak3Desc: 'Work 3 days in a row',
+  badgeStreak7: 'Committed',
+  badgeStreak7Desc: 'Work 7 days in a row',
+
+  tabSocial: 'Leaderboard',
+  tabAccount: 'Account',
+  socialRanking: 'Leaderboard',
+  socialFriends: 'Friends',
+  scopeFriends: 'Friends',
+  scopeGlobal: 'Global',
+  periodWeek: 'This week',
+  periodMonth: 'This month',
+  periodHint: 'Weeks start on Monday. Times are calculated in Turkey time (UTC+3).',
+  lbEmptyFriends: 'No friends yet. Add friends by username from the Friends tab.',
+  lbEmptyGlobal: 'Nobody is on the global leaderboard for this period. Turn on "Show me on the global leaderboard" in the Account panel to be the first.',
+  lbNoFocusYet: 'You have no focus sessions in this period yet.',
+  lbYou: 'You',
+  lbLoading: 'Loading…',
+  lbError: 'Could not load the leaderboard. Check your connection and try again.',
+  retry: 'Try again',
+  refresh: 'Refresh',
+  lbPomodoros: '{n} {n|pomodoro|pomodoros}',
+  lbPublicOff: 'You are not visible on the global leaderboard. Turn the option on in the Account panel to appear.',
+
+  friendsAddTitle: 'Add a friend',
+  friendsAddPlaceholder: 'Username',
+  friendsAddButton: 'Send request',
+  friendsIncoming: 'Incoming requests',
+  friendsOutgoing: 'Sent requests',
+  friendsList: 'My friends',
+  friendsNone: 'No friends yet.',
+  friendAccept: 'Accept',
+  friendDecline: 'Decline',
+  friendCancel: 'Cancel',
+  friendRemove: 'Remove friend',
+  friendRemoveConfirm: 'Are you sure?',
+  reqSent: 'Request sent.',
+  reqAccepted: 'They had already sent you a request, so you are now friends.',
+  reqAlreadyFriends: 'You are already friends.',
+  reqAlreadySent: 'You already sent this person a request.',
+  reqNotFound: 'No one was found with this username.',
+  reqSelf: 'You cannot send a request to yourself.',
+  reqNoProfile: 'Choose a username in the Account panel first.',
+  reqTooMany: 'You have too many pending requests. Try again once one is answered.',
+  reqError: 'Could not send the request. Try again.',
+
+  gateDisabledTitle: 'Accounts are turned off',
+  gateDisabledBody: 'Competing with friends requires the app to be connected to a Supabase project. See the "Setting up accounts" section in the README.',
+  gateSignInTitle: 'Compete with your friends',
+  gateSignInBody: 'Create an account or sign in to see the leaderboard. You can keep using the app without an account.',
+  gateSignInButton: 'Sign in / Sign up',
+  gateProfileTitle: 'Choose a username',
+  gateProfileBody: 'Your friends will find you by this name.',
+  gateProfileButton: 'Choose username',
+
+  accountTitle: 'Account',
+  accountLocalOnly: 'You are using the app without an account. Your data is stored only in this browser.',
+  accountBadConfig: 'The Supabase URL or key looks wrong. Check VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in the .env.local file and restart the app.',
+  accountDisabled: 'Accounts are not configured in this version. See the "Setting up accounts" section in the README.',
+  accountSignIn: 'Sign in',
+  accountSignUp: 'Sign up',
+  accountEmail: 'Email',
+  accountPassword: 'Password',
+  accountPasswordHint: 'At least 8 characters',
+  accountForgot: 'Forgot password',
+  accountResetSent: 'A password reset link has been sent to your email.',
+  accountNewPassword: 'Set a new password',
+  accountSavePassword: 'Save password',
+  accountGoogle: 'Continue with Google',
+  accountOr: 'or',
+  accountConfirmSent: 'A confirmation link has been sent to your email. You can sign in after clicking it.',
+  accountSignedInAs: 'Signed in',
+  accountSignOut: 'Sign out',
+  accountChooseUsername: 'Choose a username',
+  accountUsernameHint: '3-20 characters: lowercase letters, numbers and underscores. Cannot be changed later.',
+  accountUsernameSave: 'Save',
+  accountUsername: 'Username',
+  accountPublic: 'Show me on the global leaderboard',
+  accountPublicHint: 'When on, anyone can see your username and your total focus time this week/month. When off, only your friends can.',
+  accountSync: 'Sync',
+  syncIdle: 'Waiting',
+  syncSyncing: 'Syncing…',
+  syncOk: 'Synced',
+  syncError: 'Sync failed',
+  syncNow: 'Sync now',
+  accountSyncHint: 'Your focus sessions are saved to your account and appear when you sign in on another device. Your settings and goals stay on this device.',
+  accountDelete: 'Delete account',
+  accountDeleteWarn: 'Your account, username, friendships and all your sessions in the cloud will be permanently deleted. Local data on this device stays.',
+  accountDeleteConfirm: 'Yes, delete permanently',
+  cancel: 'Cancel',
+  working: 'Please wait…',
+
+  tabPlayer: 'Music',
+  playerPlaceholder: 'Paste a YouTube link',
+  playerLoad: 'Open',
+  playerInvalid: 'This is not a YouTube video or playlist link.',
+  playerHint: 'Can be a video or playlist link. It keeps playing even if you close this panel.',
+  playerSync: 'Play with focus, pause on breaks',
+  playerClear: 'Remove video',
+  playerFrameTitle: 'YouTube player',
+
+  sectionLanguage: 'Language',
+  languageAuto: 'Follow system',
+  langTr: 'Türkçe',
+  langEn: 'English',
+
+  themeGece: 'Night Lamp',
+  themeOrman: 'Forest',
+  themeGunbatimi: 'Sunset',
+  themeOkyanus: 'Ocean',
+  themeDomates: 'Tomato',
+  themeKul: 'Ash',
+
+  rewardCoffee: 'Treat yourself to a coffee',
+  rewardEpisode: 'Watch an episode of a show',
+  rewardGift: 'Buy yourself a small gift',
+
+  errGeneric: 'Something went wrong. Try again in a moment.',
+  errBadLogin: 'Incorrect email or password.',
+  errNotConfirmed: 'Your email is not confirmed yet. Click the link in your inbox.',
+  errAlreadyRegistered: 'This email is already registered. Try signing in.',
+  errWeakPassword: 'The password must be at least 8 characters.',
+  errRateLimit: 'Too many attempts. Wait a bit and try again.',
+  errBadEmail: 'The email address looks invalid.',
+  errNetwork: 'Could not connect. Check your internet connection.',
+  errUsernameTaken: 'This username is taken.',
+  errUsernameInvalid: 'The username must be 3-20 characters: lowercase letters, numbers and underscores only.'
+}
+
+const locales: Record<Lang, Record<TextKey, string>> = { tr, en }
+let locale: Lang = 'tr'
+
+/** Tarayıcı Türkçe ise Türkçe, değilse İngilizce: ticari kullanıcıların çoğu Türkçe bilmez. */
+export function resolveLang(setting: LangSetting): Lang {
+  if (setting !== 'auto') return setting
+  const langs = typeof navigator === 'undefined' ? [] : navigator.languages ?? [navigator.language]
+  return langs.some((l) => l?.toLowerCase().startsWith('tr')) ? 'tr' : 'en'
+}
+
+/**
+ * Etkin dili değiştirir. `t()` modül düzeyinde okuduğu için App her çizimde
+ * önce bunu çağırır; alt bileşenler aynı çizimde yeni dili görür.
+ */
+export function setLocale(lang: Lang): void {
+  locale = lang
+}
+
+export function getLocale(): Lang {
+  return locale
+}
+
+/** Intl ve toLocale* çağrıları için BCP 47 etiketi */
+export function dateLocale(): string {
+  return locale === 'tr' ? 'tr-TR' : 'en-US'
+}
+
+/**
+ * `{n}` değişkenle değiştirilir. `{n|tekil|çoğul}` biçimi İngilizcedeki
+ * "1 pomodoro / 2 pomodoros" farkı içindir; Türkçede gerek yok.
+ */
 export function t(key: TextKey, vars?: Record<string, string | number>): string {
-  let text: string = locales[locale][key] ?? key
+  let text: string = locales[locale][key] ?? tr[key] ?? key
   if (vars) {
-    for (const [k, v] of Object.entries(vars)) text = text.replace(`{${k}}`, String(v))
+    for (const [k, v] of Object.entries(vars)) {
+      text = text.replace(new RegExp('\\{' + k + '\\|([^|}]*)\\|([^}]*)\\}', 'g'), (_, one: string, many: string) =>
+        Number(v) === 1 ? one : many
+      )
+      text = text.split(`{${k}}`).join(String(v))
+    }
   }
   return text
 }
