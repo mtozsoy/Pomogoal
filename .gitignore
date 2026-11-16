@@ -1,0 +1,10 @@
+node_modules
+out
+dist
+*.log
+.env
+.env.local
+.env.*.local
+
+# Gizli bilgiler: depoya asla girmez
+SUPABASE DATABASE PASS.txt
