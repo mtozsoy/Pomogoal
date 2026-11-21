@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { startTicker } from './ticker'
 import type { Mode, Phase, Settings } from './types'
+import { t } from './i18n'
 
 interface TimerState {
   mode: Mode
@@ -215,9 +216,9 @@ export function useTimer(settings: Settings, { onFocusComplete, onAlarm }: Callb
 
   useEffect(() => {
     const live = state.running || elapsed > 0
-    document.title = live ? `${formatTime(remaining ?? elapsed)} · Pomodoro` : 'Pomodoro'
+    document.title = live ? `${formatTime(remaining ?? elapsed)} · ${t('appName')}` : t('appName')
     return () => {
-      document.title = 'Pomodoro'
+      document.title = t('appName')
     }
   }, [remaining, elapsed, state.running])
 

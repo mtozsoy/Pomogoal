@@ -1,6 +1,6 @@
 {
-  "name": "Pomodoro",
-  "short_name": "Pomodoro",
+  "name": "Pomogoal",
+  "short_name": "Pomogoal",
   "description": "Özelleştirilebilir pomodoro sayacı",
   "lang": "tr",
   "start_url": "./",

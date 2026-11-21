@@ -1,11 +1,11 @@
-# Pomodoro — proje notları
+# Pomogoal — proje notları
 
 Bu dosya Claude Code'un her oturumda okuduğu bağlam dosyasıdır. Projeyi yeni açan
 birine (veya yeni bir Claude oturumuna) gerekli olanı anlatır.
 
 ## Proje
 
-Özelleştirilebilir pomodoro uygulaması. Arayüz Türkçe ve İngilizce (Ayarlar → Dil; varsayılan tarayıcının dili). Vite + React 19 +
+Pomogoal: özelleştirilebilir pomodoro uygulaması (canlı adres: https://pomogoal.app). Arayüz Türkçe ve İngilizce (Ayarlar → Dil; varsayılan tarayıcının dili). Vite + React 19 +
 TypeScript, PWA (çevrimdışı açılır, "uygulama olarak yükle" destekler).
 Hesap/arkadaşlık/sıralama kısmı Supabase ile çalışır ve **isteğe bağlıdır**:
 Supabase kurulmazsa uygulama yalnızca yerel olarak sorunsuz çalışır.

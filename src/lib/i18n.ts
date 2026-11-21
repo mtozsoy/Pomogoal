@@ -1,7 +1,7 @@
 // Tüm arayüz metinleri burada. Yeni bir anahtar önce `tr` sözlüğüne eklenir;
 // `en` sözlüğü `Record<TextKey, string>` olduğu için eksik çeviri derlemede yakalanır.
 const tr = {
-  appName: 'Pomodoro',
+  appName: 'Pomogoal',
   tabTimer: 'Sayaç',
   tabGoals: 'Hedefler',
   tabCalendar: 'Takvim',
@@ -271,7 +271,7 @@ export type Lang = 'tr' | 'en'
 export type LangSetting = Lang | 'auto'
 
 const en: Record<TextKey, string> = {
-  appName: 'Pomodoro',
+  appName: 'Pomogoal',
   tabTimer: 'Timer',
   tabGoals: 'Goals',
   tabCalendar: 'Calendar',

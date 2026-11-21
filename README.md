@@ -1,4 +1,4 @@
-# Pomodoro
+# Pomogoal
 
 Tarayıcıda çalışan, özelleştirilebilir pomodoro uygulaması (Vite + React + TypeScript).
 İstersen Chrome veya Edge'den "uygulama olarak yükle" diyerek masaüstü uygulaması gibi kullanabilirsin.
