@@ -1,0 +1,26 @@
+// Cloudflare Worker ayarları. Statik site `dist` klasöründen sunulur; yalnızca
+// /api/ istekleri önce Worker koduna gider (YouTube araması gibi gizli anahtar
+// gerektiren işler tarayıcıda yapılamaz).
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // Panelde bağlı Worker'ın adıyla aynı olmalı, yoksa yeni bir Worker oluşur
+  "name": "pomogoal",
+  "main": "worker/index.ts",
+  "compatibility_date": "2025-10-01",
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*"]
+  },
+  // Panelden eklenen alan adları burada da yazılı ki bir dağıtım onları silmesin
+  "routes": [
+    { "pattern": "pomogoal.app", "custom_domain": true },
+    { "pattern": "www.pomogoal.app", "custom_domain": true }
+  ],
+  "workers_dev": true,
+  "preview_urls": true,
+  "observability": { "enabled": true }
+  // YOUTUBE_API_KEY bir "secret"tır: panelde Settings → Variables and secrets
+  // (çalışma zamanı) bölümüne, yerelde `.dev.vars` dosyasına yazılır.
+}

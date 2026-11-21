@@ -14,8 +14,9 @@ Supabase kurulmazsa uygulama yalnızca yerel olarak sorunsuz çalışır.
 
 ```
 npm install
-npm run dev        # http://localhost:5173
-npm run build
+npm run dev        # http://localhost:5173 (/api isteklerini 8787'ye yönlendirir)
+npm run dev:worker # derleyip Worker'ı wrangler ile 8787'de çalıştırır
+npm run build      # uygulama + worker tip kontrolü ve vite derlemesi
 npx tsc --noEmit   # tip kontrolü
 ```
 
@@ -35,6 +36,10 @@ src/lib/sync.ts          Seansların buluta eşitlenmesi
 src/lib/social.ts        Arkadaşlık ve sıralama çağrıları
 src/lib/themes.ts        Hazır arka planlar
 src/lib/youtube.ts       YouTube bağlantısı ayrıştırma, gömme adresi
+src/lib/youtubeSearch.ts /api/youtube istemcisi
+src/lib/focusSounds.ts   Web Audio odak sesleri (40 Hz, binaural, gürültüler)
+worker/index.ts          Cloudflare Worker: /api/youtube + statik dosyalar (SPA)
+wrangler.jsonc           Worker ayarları, alan adları (pomogoal.app)
 src/components/          Görünümler ve küçük kontroller
 supabase/schema.sql      Veritabanı şeması (tablolar, RLS, fonksiyonlar)
 supabase/migration-pomodoros.sql   Sonradan eklenen pomodoros sütunu
@@ -83,6 +88,14 @@ supabase/migration-pomodoros.sql   Sonradan eklenen pomodoros sütunu
   Yapıştırılan adres iframe'e doğrudan verilmez: `lib/youtube.ts` yalnızca
   doğrulanmış video/liste kimliğinden `youtube-nocookie.com` adresi kurar.
   Oynat/duraklat komutları YouTube API betiği yüklenmeden `postMessage` ile gider.
+  Odak sesleri sekmesindeyken iframe `display:none` değil `.tucked` ile 1px'e
+  sıkıştırılır; görünmeyen iframe bazı tarayıcılarda durur.
+- **YouTube API anahtarı yalnızca Worker'da** (`YOUTUBE_API_KEY` secret'ı,
+  yerelde `.dev.vars`). Worker yalnızca aynı siteden gelen isteklere cevap verir
+  ve sonuçları önbelleğe alır (kota: günde 10.000 birim, arama 100 birim).
+- **Odak sesleri dosya değil, Web Audio ile üretilir**: reklam/telif yok,
+  çevrimdışı çalışır. Açıklamalarda sağlık iddiası abartılmaz; "araştırılıyor /
+  kanıt sınırlı" dili bilinçli olarak korunur.
 - **Genel sıralamada görünmek varsayılan olarak kapalı** (`profiles.is_public`).
 - Hafta/ay sınırları Europe/Istanbul saatine göre, hafta pazartesi başlar.
 - Veritabanında her tabloda RLS açık; başkalarının verisine yalnızca
@@ -102,7 +115,8 @@ dosyasına konmaz.
 
 - Tamamlandı: zamanlayıcı (3 mod), 4 gösterge stili, görünüm/ayar panelleri,
   hedefler-ödüller-seviye-rozetler, takvim ve seri, hesap + arkadaşlık +
-  haftalık/aylık sıralama, şifre sıfırlama, PWA, uygulama içi YouTube oynatıcısı.
+  haftalık/aylık sıralama, şifre sıfırlama, PWA, uygulama içi YouTube oynatıcısı
+  (arama, öneriler) ve odak sesleri, Cloudflare Workers'ta yayın.
 - **Sıradaki iş: oynatıcıya Spotify desteği.** Google ile giriş kodu hazır;
   Supabase panelinde sağlayıcı açılınca düğme kendiliğinden görünür.
 - Açık karar: geri sayım modu pomodoroya çok benziyor. Ya hazır süre düğmeleriyle

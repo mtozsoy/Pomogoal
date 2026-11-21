@@ -14,14 +14,26 @@ npm run dev
 
 Sonra tarayıcıda http://localhost:5173 adresini aç.
 
+YouTube araması Cloudflare Worker'daki `/api/youtube` ucundan gelir. Yerelde denemek için
+proje klasörüne `.dev.vars` dosyası açıp içine `YOUTUBE_API_KEY=...` yaz (git'e girmez),
+ayrı bir terminalde `npm run dev:worker` çalıştır; Vite `/api` isteklerini oraya yönlendirir.
+Worker çalışmıyorsa arama yerine bağlantı yapıştırma ve odak sesleri yine çalışır.
+
 ## Yayınlama
 
 ```
 npm run build
 ```
 
-`dist` klasörü oluşur. İçindekileri herhangi bir statik barındırmaya (GitHub Pages, Netlify, Vercel...)
-yüklemen yeterli. Yayınlanan sürüm çevrimdışı da açılır ve "yükle" seçeneği sunar.
+Site Cloudflare Workers üzerinde (`wrangler.jsonc`): `master` dalına gönderilen her
+değişiklik otomatik olarak derlenip yayınlanır. Yayınlanan sürüm çevrimdışı da açılır ve
+"yükle" seçeneği sunar.
+
+YouTube araması için Google Cloud'da "YouTube Data API v3" açılıp bir API anahtarı
+oluşturulur (yalnızca bu API ile sınırlandır) ve Cloudflare'de Worker → Settings →
+Variables and secrets bölümüne **Secret** türünde `YOUTUBE_API_KEY` adıyla eklenir.
+Anahtar istemci koduna asla girmez. Varsayılan kota günde 10.000 birimdir; bir arama
+100 birim tutar (sonuçlar 6 saat önbellekte tutulur).
 
 ## Özellikler
 
@@ -35,7 +47,7 @@ yüklemen yeterli. Yayınlanan sürüm çevrimdışı da açılır ve "yükle" s
 - Kronometre ve geri sayımda 20 dakika odak = 1 pomodoro; artan dakikalar kaybolmaz, sonraki turlarda birikir
 
 - Türkçe ve İngilizce arayüz: Ayarlar → Dil. Varsayılan olarak tarayıcının dilini izler
-- Müzik: üstteki nota simgesinden bir YouTube video veya oynatma listesi bağlantısı yapıştır; köşedeki oynatıcı paneli kapatsan da çalmaya devam eder. İstersen odak başlayınca oynatıp molada duraklatır
+- Müzik: üstteki nota simgesinden açılan panelde iki sekme var. "Odak sesleri" cihazda üretilen 40 Hz gama tonu, 40 Hz binaural vuruş, kahverengi/pembe/beyaz gürültü sunar. "YouTube" sekmesinde uygulamadan çıkmadan arama yapılır (video veya oynatma listesi), öneri ve popüler listeleri gelir, bağlantı da yapıştırılabilir. Panel kapansa da çalmaya devam eder; istersen odak başlayınca oynatıp molada duraklatır
 - İsteğe bağlı hesap: e-posta/şifre veya Google ile giriş, kullanıcı adıyla arkadaş ekleme (istek kabul edilince arkadaşlık kurulur), haftalık/aylık sıralama (arkadaşlar arasında ve genel)
 
 Hesap açmazsan her şey eskisi gibi yalnızca bu tarayıcıda çalışır: ayarlar, hedefler ve geçmiş `localStorage` alanında saklanır. Hesap açınca yalnızca odak seansların buluta eşitlenir (ayarlar ve hedefler cihazda kalır).
@@ -92,7 +104,7 @@ src/
   App.tsx                  Sekmeler, yan menüler, genel durum
   components/              TimerView, TimerDisplay, SettingsView, AppearanceView, GoalsView,
                            CalendarView, SocialView (sıralama, arkadaşlar), AccountView,
-                           MusicPlayer (YouTube oynatıcı)
+                           MusicPlayer (odak sesleri ve YouTube)
   lib/account.tsx          Giriş, kayıt, profil
   lib/sync.ts              Seansları buluta eşitleme
   lib/social.ts            Arkadaşlık ve sıralama çağrıları
@@ -103,6 +115,10 @@ src/
   lib/i18n.ts              Tüm arayüz metinleri (Türkçe ve İngilizce)
   lib/sound.ts             Bitiş sesleri
   lib/youtube.ts           YouTube bağlantısını ayrıştırma ve gömme adresi
+  lib/youtubeSearch.ts     /api/youtube arama ucunun istemcisi
+  lib/focusSounds.ts       Web Audio ile üretilen odak sesleri
+worker/index.ts            Cloudflare Worker: /api/youtube ve statik dosyalar
+wrangler.jsonc             Worker ayarları ve alan adları
   lib/themes.ts            Hazır arka planlar
 ```
 

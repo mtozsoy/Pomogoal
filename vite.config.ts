@@ -5,5 +5,6 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   base: './',
   plugins: [react()],
-  server: { port: 5173 }
+  // /api/ istekleri `npm run dev:worker` ile çalışan yerel Worker'a gider
+  server: { port: 5173, proxy: { '/api': 'http://localhost:8787' } }
 })

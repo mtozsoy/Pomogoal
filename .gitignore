@@ -5,6 +5,8 @@ dist
 .env
 .env.local
 .env.*.local
+.dev.vars
+.wrangler
 
 # Gizli bilgiler: depoya asla girmez
 SUPABASE DATABASE PASS.txt
